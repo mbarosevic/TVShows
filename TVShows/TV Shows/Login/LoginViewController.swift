@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SVProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -16,6 +17,15 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // Simple SVProgressHUD example, a dispatch queue dismisses the progress hud after 5 seconds of displayed progress hud
+        // A great use case is to display progress hud after Login btn click and while API call is being performed
+        
+        //SVProgressHUD.show()
+        // Closure
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 5){
+        //    SVProgressHUD.dismiss()
+        //}
     }
     
     
