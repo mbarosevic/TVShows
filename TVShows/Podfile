@@ -1,0 +1,12 @@
+# Uncomment the next line to define a global platform for your project
+# It is a small difference between podfile platform and iOS version in Deployment Info
+platform :ios, '12.1'
+
+target 'TV Shows' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for TV Shows
+  pod "SVProgressHUD"
+  pod "Alamofire"
+end
