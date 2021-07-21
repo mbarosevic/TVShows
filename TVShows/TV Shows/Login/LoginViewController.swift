@@ -28,7 +28,7 @@ struct LoginResponse: Codable {
 
 final class LoginViewController: UIViewController {
 
-    @IBOutlet private weak var usernameInputTextField: UITextField!
+    @IBOutlet private weak var emailInputTextField: UITextField!
     @IBOutlet private weak var passwordInputTextField: UITextField!
     @IBOutlet private weak var checkboxButton: UIButton!
     @IBOutlet private weak var loginButton: UIButton!
@@ -38,7 +38,6 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         addRoundedEdgesToTheLoginButton()
         updateDesignOfUITextField()
-        //signIn()
     }
     
     @IBAction private func touchRememberMeCheckbox() {
@@ -51,18 +50,54 @@ final class LoginViewController: UIViewController {
         }
     }
     
+    @IBAction func touchLoginButton() {
+        let emailTextFieldValue = emailInputTextField.text ?? ""
+        let passwordTextFieldValue = passwordInputTextField.text ?? ""
+        
+        if emailTextFieldValue == "" {
+            showAlert(display: "Please enter username")
+        } else if passwordTextFieldValue == "" {
+            showAlert(display: "Please enter password")
+        } else {
+            print("username: \(emailTextFieldValue)")
+            print("pw: \(passwordTextFieldValue)")
+            signIn(email: emailTextFieldValue, password: passwordTextFieldValue)
+        }
+    }
+    
+    @IBAction func touchRegisterButton() {
+        let emailTextFieldValue = emailInputTextField.text ?? ""
+        let passwordTextFieldValue = passwordInputTextField.text ?? ""
+        
+        if emailTextFieldValue == "" {
+            showAlert(display: "Please enter username")
+        } else if passwordTextFieldValue == "" {
+            showAlert(display: "Please enter password")
+        } else {
+            print("username: \(emailTextFieldValue)")
+            print("pw: \(passwordTextFieldValue)")
+            register(email: emailTextFieldValue, password: passwordTextFieldValue)
+        }
+    }
+    
+    private func showAlert(display message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func addRoundedEdgesToTheLoginButton() {
         loginButton.layer.cornerRadius = 21.5
     }
     
     private func updateDesignOfUITextField() {
-        usernameInputTextField.setLeftPaddingPoints(10)
+        emailInputTextField.setLeftPaddingPoints(10)
         passwordInputTextField.setLeftPaddingPoints(10)
 
-        setBottomLine(to: usernameInputTextField)
+        setBottomLine(to: emailInputTextField)
         setBottomLine(to: passwordInputTextField)
         
-        setPlaceholderText(to: usernameInputTextField, value: "ios.team@infinum.com")
+        setPlaceholderText(to: emailInputTextField, value: "ios.team@infinum.com")
         setPlaceholderText(to: passwordInputTextField, value: "••••••••••")
     }
     
@@ -82,15 +117,40 @@ final class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
     }
     
-    private func signIn() {
+    private func signIn(email: String, password: String) {
         let params: [String: String] = [
-                    "email": "mbarosevic@gmail.com",
-                    "password": "tester1234",
-                ]
+                    "email": email,
+                    "password": password,
+                    ]
         SVProgressHUD.show()
         AF
             .request(
                 "https://tv-shows.infinum.academy/users/sign_in",
+                method: .post,
+                parameters: params,
+                encoder: JSONParameterEncoder.default)
+            .validate()
+            .responseDecodable(of: LoginResponse.self) { response in
+                SVProgressHUD.dismiss()
+                switch response.result {
+                case .success(let response):
+                    print("OK \(response)")
+                case .failure(let error):
+                    print("Error2 \(error)")
+                }
+            }
+    }
+    
+    private func register(email: String, password: String) {
+        let params: [String: String] = [
+                    "email": email,
+                    "password": password,
+                    "password_confirmation": password
+                    ]
+        SVProgressHUD.show()
+        AF
+            .request(
+                "https://tv-shows.infinum.academy/users",
                 method: .post,
                 parameters: params,
                 encoder: JSONParameterEncoder.default)

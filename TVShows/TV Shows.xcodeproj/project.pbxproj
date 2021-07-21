@@ -11,6 +11,8 @@
 		E8146CD726975F410035639A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8146CD626975F410035639A /* AppDelegate.swift */; };
 		E8146CE026975F420035639A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8146CDF26975F420035639A /* Assets.xcassets */; };
 		E8146CE326975F420035639A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8146CE126975F420035639A /* LaunchScreen.storyboard */; };
+		E83F281726A74A98004B4D29 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E83F281626A74A98004B4D29 /* Home.storyboard */; };
+		E83F281926A74AB2004B4D29 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83F281826A74AB2004B4D29 /* HomeViewController.swift */; };
 		E88FCF89269B4B56008BC4D0 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E88FCF88269B4B56008BC4D0 /* Login.storyboard */; };
 		E88FCF8B269B4B89008BC4D0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88FCF8A269B4B89008BC4D0 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
@@ -23,6 +25,8 @@
 		E8146CDF26975F420035639A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8146CE226975F420035639A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E8146CE426975F420035639A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E83F281626A74A98004B4D29 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
+		E83F281826A74AB2004B4D29 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E88FCF88269B4B56008BC4D0 /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		E88FCF8A269B4B89008BC4D0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		FC899D6C51FE57ECAC8C38AB /* Pods-TV Shows.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TV Shows.release.xcconfig"; path = "Target Support Files/Pods-TV Shows/Pods-TV Shows.release.xcconfig"; sourceTree = "<group>"; };
@@ -78,13 +82,39 @@
 		E8146CD526975F410035639A /* TV Shows */ = {
 			isa = PBXGroup;
 			children = (
+				E83F281526A74A6E004B4D29 /* Application */,
+				E83F281426A74A53004B4D29 /* Resources */,
+				E83F281326A74A47004B4D29 /* Home */,
 				E88FCF87269B4AF4008BC4D0 /* Login */,
-				E8146CD626975F410035639A /* AppDelegate.swift */,
-				E8146CDF26975F420035639A /* Assets.xcassets */,
-				E8146CE126975F420035639A /* LaunchScreen.storyboard */,
-				E8146CE426975F420035639A /* Info.plist */,
 			);
 			path = "TV Shows";
+			sourceTree = "<group>";
+		};
+		E83F281326A74A47004B4D29 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				E83F281626A74A98004B4D29 /* Home.storyboard */,
+				E83F281826A74AB2004B4D29 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		E83F281426A74A53004B4D29 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E8146CDF26975F420035639A /* Assets.xcassets */,
+				E8146CE426975F420035639A /* Info.plist */,
+				E8146CE126975F420035639A /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E83F281526A74A6E004B4D29 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				E8146CD626975F410035639A /* AppDelegate.swift */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 		E88FCF87269B4AF4008BC4D0 /* Login */ = {
@@ -158,6 +188,7 @@
 				E8146CE326975F420035639A /* LaunchScreen.storyboard in Resources */,
 				E8146CE026975F420035639A /* Assets.xcassets in Resources */,
 				E88FCF89269B4B56008BC4D0 /* Login.storyboard in Resources */,
+				E83F281726A74A98004B4D29 /* Home.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +243,7 @@
 			files = (
 				E88FCF8B269B4B89008BC4D0 /* LoginViewController.swift in Sources */,
 				E8146CD726975F410035639A /* AppDelegate.swift in Sources */,
+				E83F281926A74AB2004B4D29 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +385,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2H6UDJ3P4F;
-				INFOPLIST_FILE = "TV Shows/Info.plist";
+				INFOPLIST_FILE = "TV Shows/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -374,7 +406,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2H6UDJ3P4F;
-				INFOPLIST_FILE = "TV Shows/Info.plist";
+				INFOPLIST_FILE = "TV Shows/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

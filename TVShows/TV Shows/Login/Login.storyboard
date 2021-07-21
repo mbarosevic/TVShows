@@ -111,6 +111,9 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="touchLoginButton" destination="Y6W-OH-hqX" eventType="touchUpInside" id="pyc-Sq-I5s"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z5w-sO-RLj">
                                 <rect key="frame" x="150" y="537" width="90" height="30"/>
@@ -118,6 +121,9 @@
                                 <state key="normal" title="Register">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="touchRegisterButton" destination="Y6W-OH-hqX" eventType="touchUpInside" id="rQF-Xd-jWL"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -146,9 +152,9 @@
                     </view>
                     <connections>
                         <outlet property="checkboxButton" destination="YBx-qN-pjq" id="xnN-2X-Iej"/>
+                        <outlet property="emailInputTextField" destination="2Pf-UQ-Spj" id="TMi-NW-M0c"/>
                         <outlet property="loginButton" destination="eqG-BP-Ezg" id="grJ-nD-w2H"/>
                         <outlet property="passwordInputTextField" destination="76l-p5-Bqc" id="Ofk-n8-M4p"/>
-                        <outlet property="usernameInputTextField" destination="2Pf-UQ-Spj" id="TMi-NW-M0c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
