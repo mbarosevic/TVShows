@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 
 final class LoginViewController: UIViewController, APIManagerDelegate {
-    private var loggedInUser: User?
     
+    private var loggedInUser: User?
+    private var rememberMe: Bool = false
     @IBOutlet private weak var emailInputTextField: UITextField!
     @IBOutlet private weak var passwordInputTextField: UITextField!
     @IBOutlet private weak var checkboxButton: UIButton!
     @IBOutlet private weak var loginButton: UIButton!
-    private var rememberMe: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
