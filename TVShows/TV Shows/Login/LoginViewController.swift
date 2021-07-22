@@ -7,27 +7,10 @@
 
 import Foundation
 import UIKit
-import SVProgressHUD
-import Alamofire
 
-struct LoginUser: Codable {
-    let email: String
-    let imageUrl: String?
-    let id: String
+final class LoginViewController: UIViewController, APIManagerDelegate {
+    private var loggedInUser: User?
     
-    enum CodingKeys: String, CodingKey {
-        case email
-        case imageUrl = "image_url"
-        case id
-    }
-}
-
-struct LoginResponse: Codable {
-    let user: LoginUser
-}
-
-final class LoginViewController: UIViewController {
-
     @IBOutlet private weak var emailInputTextField: UITextField!
     @IBOutlet private weak var passwordInputTextField: UITextField!
     @IBOutlet private weak var checkboxButton: UIButton!
@@ -36,8 +19,13 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addRoundedEdgesToTheLoginButton()
-        updateDesignOfUITextField()
+        applyDesignChanges()
+        APIManager.self.shared().delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     @IBAction private func touchRememberMeCheckbox() {
@@ -55,42 +43,56 @@ final class LoginViewController: UIViewController {
         let passwordTextFieldValue = passwordInputTextField.text ?? ""
         
         if emailTextFieldValue == "" {
-            showAlert(display: "Please enter username")
+            showAlertWith(message: "Please enter your email")
         } else if passwordTextFieldValue == "" {
-            showAlert(display: "Please enter password")
+            showAlertWith(message: "Please enter your password")
         } else {
-            print("username: \(emailTextFieldValue)")
-            print("pw: \(passwordTextFieldValue)")
-            signIn(email: emailTextFieldValue, password: passwordTextFieldValue)
+            APIManager.self.shared().loginUserWith(email: emailTextFieldValue, password: passwordTextFieldValue)
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            if self.checkAPIResponse(for: self.loggedInUser ?? User.init(email: "", imageUrl: "", id: "")){
+                let storyboard = UIStoryboard(name: "Login", bundle: nil)
+                let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+                self.navigationController?.pushViewController(homeViewController, animated: true)
+            }
+        })
     }
-    
+     
     @IBAction func touchRegisterButton() {
         let emailTextFieldValue = emailInputTextField.text ?? ""
         let passwordTextFieldValue = passwordInputTextField.text ?? ""
         
         if emailTextFieldValue == "" {
-            showAlert(display: "Please enter username")
+            showAlertWith(message: "Please enter your email")
         } else if passwordTextFieldValue == "" {
-            showAlert(display: "Please enter password")
+            showAlertWith(message: "Please enter your password")
         } else {
-            print("username: \(emailTextFieldValue)")
-            print("pw: \(passwordTextFieldValue)")
-            register(email: emailTextFieldValue, password: passwordTextFieldValue)
+            APIManager.self.shared().registerUserWith(email: emailTextFieldValue, password: passwordTextFieldValue)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            if self.checkAPIResponse(for: self.loggedInUser ?? User.init(email: "", imageUrl: "", id: "")){
+                let storyboard = UIStoryboard(name: "Login", bundle: nil)
+                let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+                self.navigationController?.pushViewController(homeViewController, animated: true)
+            }
+        })
+    }
+    
+    private func checkAPIResponse(for userData: User) -> Bool {
+        if userData.email != "" && userData.id != "" {
+            return true
+        } else {
+            return false
         }
     }
     
-    private func showAlert(display message: String) {
+    private func showAlertWith(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func addRoundedEdgesToTheLoginButton() {
-        loginButton.layer.cornerRadius = 21.5
-    }
-    
-    private func updateDesignOfUITextField() {
+    private func applyDesignChanges() {
         emailInputTextField.setLeftPaddingPoints(10)
         passwordInputTextField.setLeftPaddingPoints(10)
 
@@ -99,6 +101,8 @@ final class LoginViewController: UIViewController {
         
         setPlaceholderText(to: emailInputTextField, value: "ios.team@infinum.com")
         setPlaceholderText(to: passwordInputTextField, value: "••••••••••")
+        
+        loginButton.addRoundedEdgesToTheLoginButton(21.5)
     }
     
     private func setBottomLine(to textField: UITextField) {
@@ -117,60 +121,23 @@ final class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
     }
     
-    private func signIn(email: String, password: String) {
-        let params: [String: String] = [
-                    "email": email,
-                    "password": password,
-                    ]
-        SVProgressHUD.show()
-        AF
-            .request(
-                "https://tv-shows.infinum.academy/users/sign_in",
-                method: .post,
-                parameters: params,
-                encoder: JSONParameterEncoder.default)
-            .validate()
-            .responseDecodable(of: LoginResponse.self) { response in
-                SVProgressHUD.dismiss()
-                switch response.result {
-                case .success(let response):
-                    print("OK \(response)")
-                case .failure(let error):
-                    print("Error2 \(error)")
-                }
-            }
-    }
-    
-    private func register(email: String, password: String) {
-        let params: [String: String] = [
-                    "email": email,
-                    "password": password,
-                    "password_confirmation": password
-                    ]
-        SVProgressHUD.show()
-        AF
-            .request(
-                "https://tv-shows.infinum.academy/users",
-                method: .post,
-                parameters: params,
-                encoder: JSONParameterEncoder.default)
-            .validate()
-            .responseDecodable(of: LoginResponse.self) { response in
-                SVProgressHUD.dismiss()
-                switch response.result {
-                case .success(let response):
-                    print("OK \(response)")
-                case .failure(let error):
-                    print("Error2 \(error)")
-                }
-            }
+    func setLoginDataFor(_ user: User?) {
+        self.loggedInUser = user
+        
+        print("Logged In User: \(user?.email ?? "Nema ga")")
     }
 }
 
 extension UITextField {
-    func setLeftPaddingPoints(_ amount:CGFloat){
+    func setLeftPaddingPoints(_ amount: CGFloat){
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
         self.leftView = paddingView
         self.leftViewMode = .always
+    }
+}
+
+extension UIButton {
+    func addRoundedEdgesToTheLoginButton(_ amount: CGFloat) {
+        self.layer.cornerRadius = amount
     }
 }

@@ -8,5 +8,8 @@
 import Foundation
 import UIKit
 final class HomeViewController: UIViewController {
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("Home screen loaded")
+    }
 }
