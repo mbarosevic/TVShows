@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -113,7 +112,7 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="touchLoginButton" destination="Y6W-OH-hqX" eventType="touchUpInside" id="pyc-Sq-I5s"/>
+                                    <action selector="didTapLoginButton" destination="Y6W-OH-hqX" eventType="touchUpInside" id="pyc-Sq-I5s"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z5w-sO-RLj">
@@ -123,7 +122,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="touchRegisterButton" destination="Y6W-OH-hqX" eventType="touchUpInside" id="rQF-Xd-jWL"/>
+                                    <action selector="didTapRegisterButton" destination="Y6W-OH-hqX" eventType="touchUpInside" id="rQF-Xd-jWL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -163,22 +162,6 @@
             </objects>
             <point key="canvasLocation" x="1053.8461538461538" y="70.379146919431278"/>
         </scene>
-        <!--Home View Controller-->
-        <scene sceneID="PNg-E6-WY7">
-            <objects>
-                <viewController storyboardIdentifier="HomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="piE-ga-wag" customClass="HomeViewController" customModule="TV_Shows" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xA1-9H-kAU">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="uTp-qx-FJk"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="XSo-ob-6dC"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ar3-uE-rEj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2102" y="81"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Zxe-ic-QT6">
             <objects>
@@ -203,8 +186,5 @@
         <image name="logo-white" width="162" height="38"/>
         <image name="splash-top-left" width="140" height="100"/>
         <image name="splash-top-right" width="202" height="266"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
