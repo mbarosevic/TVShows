@@ -10,70 +10,155 @@ import UIKit
 import SVProgressHUD
 
 final class LoginViewController: UIViewController {
-
-    @IBOutlet private weak var showNumberOfTapsLabel: UILabel!
-    @IBOutlet private weak var touchCounterButton: UIButton!
-    @IBOutlet private weak var changeStateButton: UIButton!
-    @IBOutlet private weak var loadingIndicator: UIActivityIndicatorView!
     
-    private var numberOfClicks: Int = 0
+    @IBOutlet private weak var emailInputTextField: UITextField!
+    @IBOutlet private weak var passwordInputTextField: UITextField!
+    @IBOutlet private weak var checkboxButton: UIButton!
+    @IBOutlet private weak var loginButton: UIButton!
+    
+    private var loggedInUser: User?
+    private var rememberMe: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addRoundedEdgesToTheButton()
-        autoStartActivityIndicator()
-        //displaySVProgressHUD()
+        applyDesignChanges()
     }
     
-    private func addRoundedEdgesToTheButton() {
-        touchCounterButton.layer.cornerRadius = 20
-        touchCounterButton.layer.borderWidth = 0.2
-        touchCounterButton.layer.borderColor = UIColor.gray.cgColor
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    private func autoStartActivityIndicator(){
-        loadingIndicator.startAnimating()
-        loadingIndicator.isHidden = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3){ [self] in
-            loadingIndicator.stopAnimating()
-            loadingIndicator.isHidden = true
-        }
-    }
-    
-    private func startStopActivityIndicator() {
-        if loadingIndicator.isAnimating {
-            loadingIndicator.stopAnimating()
-            loadingIndicator.isHidden = true
-            changeStateButton.setTitle("Start", for: .normal)
+    @IBAction private func touchRememberMeCheckbox() {
+        if !rememberMe {
+            checkboxButton.setImage(UIImage(named: "ic-checkbox-selected"), for: .normal)
+            rememberMe = true
         } else {
-            loadingIndicator.startAnimating()
-            loadingIndicator.isHidden = false
-            changeStateButton.setTitle("Stop", for: .normal)
+            checkboxButton.setImage(UIImage(named: "ic-checkbox-unselected"), for: .normal)
+            rememberMe = false
         }
     }
     
-    // Display progress HUD for 5 seconds
-    private func displaySVProgressHUD() {
-        // Simple SVProgressHUD example, a dispatch queue dismisses the progress hud after 5 seconds of displayed progress hud
-        // A great use case is to display progress hud after Login btn click and while API call is being performed
+    @IBAction func didTapLoginButton() {
+        guard let email = emailInputTextField.text, !email.isEmpty else {
+            showAlertWith(message: "Please enter your email")
+            return
+        }
+        
+        guard let password = passwordInputTextField.text, !password.isEmpty else {
+            showAlertWith(message: "Please enter your password")
+            return
+        }
         
         SVProgressHUD.show()
-        // Closure
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5){
-            SVProgressHUD.dismiss()
+        APIManager.shared.loginUser(
+            with: UserParameters(password: password, email: email),
+            completion: { response in
+                SVProgressHUD.dismiss()
+                switch response.result {
+                case .success(let response):
+                    self.loggedInUser = response.user
+                    self.goToHomeScreen()
+                case .failure(let error):
+                    print("Error \(error)")
+                }
+            }
+        )
+    }
+     
+    @IBAction func didTapRegisterButton() {
+        guard let email = emailInputTextField.text, !email.isEmpty else {
+            showAlertWith(message: "Please enter your email")
+            return
+        }
+        
+        guard let password = passwordInputTextField.text, !password.isEmpty else {
+            showAlertWith(message: "Please enter your password")
+            return
+        }
+        
+        SVProgressHUD.show()
+        APIManager.shared.registerUser(
+            with: UserParameters(password: password, email: email),
+            completion: { response in
+                SVProgressHUD.dismiss()
+                switch response.result {
+                case .success(let response):
+                    self.loggedInUser = response.user
+                    self.goToHomeScreen()
+                case .failure(let error):
+                    print("Error \(error)")
+                }
+            }
+        )
+    }
+    
+    private func checkAPIResponse(for userData: User) -> Bool {
+        if userData.email != "" && userData.id != "" {
+            return true
+        } else {
+            return false
         }
     }
     
-    @IBAction private func buttonActionHandler() {
-        // Console output
-        print("Button tapped")
-        
-        // numberOfTaps variable increment on each tap of button
-        numberOfClicks += 1
-        showNumberOfTapsLabel.text = String(numberOfClicks)
+    private func showAlertWith(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(alert, animated: true)
     }
     
-    @IBAction private func changeActivityIndicatorVisibilityButton() {
-        startStopActivityIndicator()
+    private func applyDesignChanges() {
+        emailInputTextField.setLeftPadding(equalTo: 10)
+        passwordInputTextField.setLeftPadding(equalTo: 10)
+
+        emailInputTextField.setBottomLine()
+        passwordInputTextField.setBottomLine()
+
+        setPlaceholderText(to: emailInputTextField, value: "ios.team@infinum.com")
+        setPlaceholderText(to: passwordInputTextField, value: "••••••••••")
+        
+        loginButton.applyCornerRadius(of: 21.5)
+    }
+    
+    private func setPlaceholderText(to textField: UITextField, value: String) {
+        textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
+    }
+    
+    private func goToHomeScreen() {
+        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+        let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        navigationController?.pushViewController(homeViewController, animated: true)
+    }
+}
+
+extension UITextField {
+    func setLeftPadding(equalTo amount: CGFloat){
+        let paddingView = UIView(frame: CGRect(
+                                    x: 0,
+                                    y: 0,
+                                    width: amount,
+                                    height: frame.size.height))
+        leftView = paddingView
+        leftViewMode = .always
+    }
+}
+
+extension UITextField {
+    func setBottomLine() {
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(
+            x: 0.0,
+            y: frame.height - 1,
+            width: frame.width,
+            height: 1.0)
+        bottomLine.backgroundColor = UIColor.white.cgColor
+        borderStyle = .none
+        layer.addSublayer(bottomLine)
+    }
+}
+
+extension UIButton {
+    func applyCornerRadius(of radius: CGFloat) {
+        layer.cornerRadius = radius
     }
 }
