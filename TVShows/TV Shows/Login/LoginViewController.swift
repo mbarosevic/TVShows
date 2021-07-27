@@ -18,6 +18,7 @@ final class LoginViewController: UIViewController {
     
     private var loggedInUser: User?
     private var rememberMe: Bool = false
+    var user: ((_ user: User) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,14 +54,16 @@ final class LoginViewController: UIViewController {
         SVProgressHUD.show()
         APIManager.shared.loginUser(
             with: UserParameters(password: password, email: email),
-            completion: { response in
+            completion: { [self] dataResponse in
                 SVProgressHUD.dismiss()
-                switch response.result {
+                switch dataResponse.result {
                 case .success(let response):
-                    self.loggedInUser = response.user
-                    self.goToHomeScreen()
+                    loggedInUser = response.user
+                    let headers = dataResponse.response?.headers.dictionary ?? [:]
+                    handleSuccesfulLogin(for: response.user, headers: headers)
                 case .failure(let error):
                     print("Error \(error)")
+                    showAlertWith(message: "Login failed")
                 }
             }
         )
@@ -80,14 +83,16 @@ final class LoginViewController: UIViewController {
         SVProgressHUD.show()
         APIManager.shared.registerUser(
             with: UserParameters(password: password, email: email),
-            completion: { response in
+            completion: { [self] dataResponse in
                 SVProgressHUD.dismiss()
-                switch response.result {
+                switch dataResponse.result {
                 case .success(let response):
-                    self.loggedInUser = response.user
-                    self.goToHomeScreen()
+                    loggedInUser = response.user
+                    let headers = dataResponse.response?.headers.dictionary ?? [:]
+                    handleSuccesfulLogin(for: response.user, headers: headers)
                 case .failure(let error):
                     print("Error \(error)")
+                    showAlertWith(message: "Registration failed")
                 }
             }
         )
@@ -122,6 +127,27 @@ final class LoginViewController: UIViewController {
     
     private func setPlaceholderText(to textField: UITextField, value: String) {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
+    }
+    var onDataAvailable : ((_ data: User) -> ())?
+
+    private func handleSuccesfulLogin(for user: User, headers: [String: String]) {
+        guard let authInfo = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: "Missing headers")
+            return
+        }
+        
+        guard let loginInfo = try? User(email: user.email, imageUrl: user.imageUrl ?? "", id: user.id) else {
+            SVProgressHUD.showError(withStatus: "Missing user details")
+            return
+        }
+        
+        self.user?(loginInfo)
+        self.onDataAvailable?(loginInfo)
+
+        print("User: \(loginInfo), authInfo: \(authInfo)")
+        UserData.sharedInstance.user = loginInfo
+        UserData.sharedInstance.authInfo = authInfo
+        goToHomeScreen()
     }
     
     private func goToHomeScreen() {
