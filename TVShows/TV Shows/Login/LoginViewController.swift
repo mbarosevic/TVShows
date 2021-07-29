@@ -18,11 +18,13 @@ final class LoginViewController: UIViewController {
     
     private var loggedInUser: User?
     private var rememberMe: Bool = false
-    var user: ((_ user: User) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         applyDesignChanges()
+        
+        emailInputTextField.text = "mbarosevic@gmail.com"
+        passwordInputTextField.text = "tester1234"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,7 +130,6 @@ final class LoginViewController: UIViewController {
     private func setPlaceholderText(to textField: UITextField, value: String) {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
     }
-    var onDataAvailable : ((_ data: User) -> ())?
 
     private func handleSuccesfulLogin(for user: User, headers: [String: String]) {
         guard let authInfo = try? AuthInfo(headers: headers) else {
@@ -140,20 +141,15 @@ final class LoginViewController: UIViewController {
             SVProgressHUD.showError(withStatus: "Missing user details")
             return
         }
-        
-        self.user?(loginInfo)
-        self.onDataAvailable?(loginInfo)
-
-        print("User: \(loginInfo), authInfo: \(authInfo)")
         UserData.sharedInstance.user = loginInfo
         UserData.sharedInstance.authInfo = authInfo
         goToHomeScreen()
     }
     
     private func goToHomeScreen() {
-        let storyboard = UIStoryboard(name: "Home", bundle: nil)
-        let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
-        navigationController?.pushViewController(homeViewController, animated: true)
+        let storyboard = UIStoryboard(name: "Home", bundle: .main)
+        let homeViewController = storyboard.instantiateViewController(withIdentifier: "Shows") as! ShowsViewController
+        navigationController?.setViewControllers([homeViewController], animated: true)
     }
 }
 

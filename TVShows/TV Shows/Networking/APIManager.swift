@@ -26,6 +26,19 @@ struct UserParameters {
     }
 }
 
+struct ReviewParameters {
+    let comment: String
+    let rating: String
+    let show_id: String
+    var reviewData: [String: String] {
+        return [
+            "comment": comment,
+            "rating": rating,
+            "show_id": show_id
+        ]
+    }
+}
+
 class APIManager {
     
     // MARK: - Variables declaration
@@ -74,5 +87,49 @@ class APIManager {
         )
         .validate()
         .responseDecodable(of: LoginResponse.self, completionHandler: completion)
+    }
+    
+    // MARK: - Shows
+    func fetchShows(
+        completion: @escaping (AFDataResponse<ShowsResponse>) -> Void
+    ) {
+        sessionManager.request(
+            "https://tv-shows.infinum.academy/shows",
+            method: .get,
+            parameters: ["page": "1", "items": "100"],
+            headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+        )
+        .validate()
+        .responseDecodable(of: ShowsResponse.self, completionHandler: completion)
+    }
+    
+    // MARK: - Fetch Reviews
+    func fetchReviews(
+        for showId: String,
+        completion: @escaping (AFDataResponse<ReviewResponse>) -> Void
+    ) {
+        sessionManager.request(
+            "https://tv-shows.infinum.academy/shows/\(showId)/reviews",
+            method: .get,
+            headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+        )
+        .validate()
+        .responseDecodable(of: ReviewResponse.self, completionHandler: completion)
+    }
+    
+    // MARK: - Submit Reviews
+    func submitReview(
+        with parameters: ReviewParameters,
+        completion: @escaping (AFDataResponse<SubmitReviewResponse>) -> Void
+    ){
+            sessionManager.request(
+                "https://tv-shows.infinum.academy/shows/reviews",
+                method: .post,
+                parameters: parameters.reviewData,
+                encoder: JSONParameterEncoder.default,
+                headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+            )
+            .validate()
+            .responseDecodable(of: SubmitReviewResponse.self, completionHandler: completion)
     }
 }
