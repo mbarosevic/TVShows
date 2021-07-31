@@ -95,15 +95,15 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellDescription = tableView.dequeueReusableCell(
-            withIdentifier: String(describing: DescriptionTableViewCell.self),
+            withIdentifier: String(describing: ShowDescriptionTableViewCell.self),
             for: indexPath
-        ) as! DescriptionTableViewCell
+        ) as! ShowDescriptionTableViewCell
 
         
         let cellReview = tableView.dequeueReusableCell(
-            withIdentifier: String(describing: ReviewTableViewCell.self),
+            withIdentifier: String(describing: ShowReviewTableViewCell.self),
             for: indexPath
-        ) as! ReviewTableViewCell
+        ) as! ShowReviewTableViewCell
 
         cellDescription.configure(with: selectedShow!)
         cellReview.configure(with: reviews[indexPath.row])

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DescriptionTableViewCell: UITableViewCell {
+final class ShowDescriptionTableViewCell: UITableViewCell {
 
 
     @IBOutlet weak var showTitleLabel: UILabel!
@@ -31,7 +31,7 @@ final class DescriptionTableViewCell: UITableViewCell {
 
 // MARK: - Configure
 
-extension DescriptionTableViewCell {
+extension ShowDescriptionTableViewCell {
 
     func configure(with item: Show) {
         showTitleLabel.text = item.title
@@ -47,7 +47,7 @@ extension DescriptionTableViewCell {
 
 // MARK: - Private
 
-private extension DescriptionTableViewCell {
+private extension ShowDescriptionTableViewCell {
 
     func setupUI() {
         showDescriptionTextView.isUserInteractionEnabled = false

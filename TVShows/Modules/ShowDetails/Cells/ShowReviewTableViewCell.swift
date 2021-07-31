@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ReviewTableViewCell: UITableViewCell {
+final class ShowReviewTableViewCell: UITableViewCell {
 
     
     @IBOutlet weak var userEmailLabel: UILabel!
@@ -27,7 +27,7 @@ final class ReviewTableViewCell: UITableViewCell {
 
 // MARK: - Configure
 
-extension ReviewTableViewCell {
+extension ShowReviewTableViewCell {
 
     func configure(with review: Review) {
         userEmailLabel.text = review.user.email
@@ -38,7 +38,7 @@ extension ReviewTableViewCell {
 
 // MARK: - Private
 
-private extension ReviewTableViewCell {
+private extension ShowReviewTableViewCell {
 
     func setupUI() {
         //userImageView.layer.cornerRadius = 20
