@@ -147,8 +147,8 @@ final class LoginViewController: UIViewController {
     }
     
     private func goToHomeScreen() {
-        let storyboard = UIStoryboard(name: "Home", bundle: .main)
-        let homeViewController = storyboard.instantiateViewController(withIdentifier: "Shows") as! ShowsViewController
+        let storyboard = UIStoryboard(name: "Shows", bundle: .main)
+        let homeViewController = storyboard.instantiateViewController(withIdentifier: String(describing: ShowsViewController.self)) as! ShowsViewController
         navigationController?.setViewControllers([homeViewController], animated: true)
     }
 }

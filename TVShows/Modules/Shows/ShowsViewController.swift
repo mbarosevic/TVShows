@@ -25,8 +25,8 @@ final class ShowsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -37,27 +37,38 @@ final class ShowsViewController: UIViewController {
         let secondViewController = segue.destination as! ShowDetailsViewController
         secondViewController.selectedShow = selectedShow
     }
+}
+
+// MARK: - Private
+
+private extension ShowsViewController {
+
+    func setupTableView() {
+        //tableView.estimatedRowHeight = 110
+        //tableView.rowHeight = UITableView.automaticDimension
+
+        //tableView.tableFooterView = UIView()
+
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+}
+
+private extension ShowsViewController {
     
     func getShows() {
-        SVProgressHUD.show()
+        //showLoading()
         APIManager.shared.fetchShows(
-            completion: { [self] dataResponse in
-                SVProgressHUD.dismiss()
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                //self.hideLoading()
                 switch dataResponse.result {
                 case .success(let response):
-                    // not prefered in iOS - for loop
-                    // add forEach
-                    // response.shows.forEach...
-                    
-                    // declarative function - map, flatMap and compactMap
-                    // shows = response.shows.map ({ show -> Show in return Show((id:.., title:))
-                    //})
-                    for show in response.shows {
-                        shows.append(Show(id: show.id, title: show.title, averageRating: show.averageRating, description: show.description, imageUrl: show.imageUrl, numOfReviews: show.numOfReviews))
-                    }
-                    tableView.reloadData()
+                    self.shows = response.shows
+                    self.tableView.reloadData()
                 case .failure(let error):
-                    print("Error \(error)")
+                    print(error)
+                    //self.showFailure(with: error)
                 }
             }
         )
@@ -73,20 +84,17 @@ extension ShowsViewController: UITableViewDelegate {
         //let item = items[indexPath.row]
         
         let item = shows[indexPath.row]
-        //print("Selected Item: \(item)")
         self.selectedShow = item
-        
         self.performSegue(withIdentifier: "segueIdentifier", sender: item)
-        print("performin segue for: \(item)")
     }
 }
 
 extension ShowsViewController: UITableViewDataSource {
 
     // MARK: - UITableViewDataSource
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+    //func numberOfSections(in tableView: UITableView) -> Int {
+        //return 1
+    //}
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return shows.count
@@ -94,9 +102,9 @@ extension ShowsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: String(describing: TVShowTableViewCell.self),
+            withIdentifier: String(describing: ShowTableViewCell.self),
             for: indexPath
-        ) as! TVShowTableViewCell
+        ) as! ShowTableViewCell
 
         //cell.configure(with: items[indexPath.row])
         cell.configure(with: shows[indexPath.row])
@@ -106,20 +114,7 @@ extension ShowsViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - Private
-
-private extension ShowsViewController {
-
-    func setupTableView() {
-        print("SETTING UP TABLE VIEW")
-        
-        tableView.estimatedRowHeight = 110
-        tableView.rowHeight = UITableView.automaticDimension
-
-        tableView.tableFooterView = UIView()
-
-        tableView.delegate = self
-        tableView.dataSource = self
-    }
+extension ShowsViewController: ProgressReporting {
+    
 }
 

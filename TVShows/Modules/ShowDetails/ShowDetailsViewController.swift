@@ -30,6 +30,12 @@ final class ShowDetailsViewController: UIViewController {
         writeReviewButton.applyCornerRadius(of: 21.5)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationViewController = segue.destination as! UINavigationController
         let writeReviewViewController = navigationViewController.topViewController as! ShowReviewsViewController
