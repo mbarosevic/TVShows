@@ -40,7 +40,7 @@ extension ShowDescriptionTableViewCell {
                     string: item.imageUrl),
             placeholder:
                 UIImage(
-                    named: "icImagePlaceholder")
+                    named: "ic-show-placeholder-rectangle")
         )
         
         showDescriptionTextView.text = item.description

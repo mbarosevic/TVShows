@@ -49,7 +49,7 @@ extension ShowTableViewCell {
                     string: item.imageUrl),
             placeholder:
                 UIImage(
-                    named: "icImagePlaceholder")
+                    named: "ic-show-placeholder-vertical")
         )
         titleLabel.text = item.title
     }

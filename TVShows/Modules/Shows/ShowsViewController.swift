@@ -49,7 +49,7 @@ private extension ShowsViewController {
             image: UIImage(named: "ic-profile"),
             style: .plain,
             target: self,
-            action: #selector(test)
+            action: #selector(profileDetailsActionHandler)
         )
         profileButton.tintColor = hexStringToUIColor(hex: "#52368C")
         self.navigationItem.rightBarButtonItem = profileButton
@@ -77,8 +77,8 @@ private extension ShowsViewController {
         )
     }
     
-    @objc func test() {
-        print("test")
+    @objc func profileDetailsActionHandler() {
+        
     }
     
     func setupTableView() {
