@@ -103,6 +103,20 @@ class APIManager {
         .responseDecodable(of: ShowsResponse.self, completionHandler: completion)
     }
     
+    func fetchShow(
+        for showId: String,
+        completion: @escaping (AFDataResponse<ShowResponse>) -> Void
+    ) {
+        print("Fetching for: \(showId)")
+        sessionManager.request(
+            "https://tv-shows.infinum.academy/shows/\(showId)",
+            method: .get,
+            headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+        )
+        .validate()
+        .responseDecodable(of: ShowResponse.self, completionHandler: completion)
+    }
+    
     // MARK: - Fetch Reviews
     func fetchReviews(
         for showId: String,
@@ -119,17 +133,26 @@ class APIManager {
     
     // MARK: - Submit Reviews
     func submitReview(
-        with parameters: ReviewParameters,
+        comment: String, rating: String, showId: String,
         completion: @escaping (AFDataResponse<SubmitReviewResponse>) -> Void
     ){
-            sessionManager.request(
-                "https://tv-shows.infinum.academy/shows/reviews",
-                method: .post,
-                parameters: parameters.reviewData,
-                encoder: JSONParameterEncoder.default,
-                headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
-            )
-            .validate()
-            .responseDecodable(of: SubmitReviewResponse.self, completionHandler: completion)
+        
+        let params: [String: String] = [
+                    "comment": comment,
+                    "rating": rating,
+                    "show_id": showId
+                ]
+        
+        sessionManager.request(
+            "https://tv-shows.infinum.academy/reviews",
+            method: .post,
+            parameters: params,
+            encoder: JSONParameterEncoder.default,
+            headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+        )
+        .validate().responseDecodable(
+            of: SubmitReviewResponse.self,
+            completionHandler: completion)
+                    
     }
 }

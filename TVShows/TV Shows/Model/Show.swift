@@ -36,3 +36,8 @@ struct ShowsResponse: Decodable {
     let shows: [Show]
     //let pagination: [Pagination]
 }
+
+struct ShowResponse: Decodable {
+    let show: Show
+}
+

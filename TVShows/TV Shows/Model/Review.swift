@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct Review: Decodable {
+struct Review: Codable {
     let id: String
     let comment: String
     let rating: Int
@@ -15,17 +15,18 @@ struct Review: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id
-        case comment
         case rating
+        case comment
         case showId = "show_id"
         case user
     }
 }
 
-struct ReviewResponse: Decodable {
+struct ReviewResponse: Codable {
     let reviews: [Review]
 }
 
-struct SubmitReviewResponse: Decodable {
+struct SubmitReviewResponse: Codable {
     let review: Review
 }
+

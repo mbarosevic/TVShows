@@ -13,26 +13,27 @@ final class ShowDetailsViewController: UIViewController {
 
     @IBOutlet weak var showDetailsTableView: UITableView!
     @IBOutlet weak var writeReviewButton: UIButton!
-    
+
     var selectedShow: Show?
     private var reviews = [Review]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("ShowDetailsVC")
+        NotificationCenter.default.addObserver(self, selector: #selector(didWriteAReview), name:NSNotification.Name("NSNotif"), object: nil)
+
         guard let show = selectedShow, selectedShow != nil else {
             print("Error")
             return
         }
         print(show)
+        self.title = selectedShow?.title
+        setupUI()
         getReviews()
-        setupTableView()
-        writeReviewButton.applyCornerRadius(of: 21.5)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
@@ -40,6 +41,31 @@ final class ShowDetailsViewController: UIViewController {
         let navigationViewController = segue.destination as! UINavigationController
         let writeReviewViewController = navigationViewController.topViewController as! ShowReviewsViewController
         writeReviewViewController.selectedShow = selectedShow
+    }
+    
+    @objc func didWriteAReview() {
+        getShowAfterReview()
+        getReviews()
+    }
+
+}
+
+private extension ShowDetailsViewController {
+    
+    func getShowAfterReview() {
+        APIManager.shared.fetchShow(for: selectedShow!.id,
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                //self.hideLoading()
+                switch dataResponse.result {
+                case .success(let response):
+                    // updated show (avg rating, num of comments)
+                    self.selectedShow = response.show
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        )
     }
     
     func getReviews(){
@@ -50,15 +76,9 @@ final class ShowDetailsViewController: UIViewController {
                 SVProgressHUD.dismiss()
                 switch dataResponse.result {
                 case .success(let response):
-                    for review in response.reviews {
-                        //shows.append(TVShowItem(name: show.title, image: nil))
-                        reviews.append(Review(
-                                        id: review.id,
-                                        comment: review.comment,
-                                        rating: review.rating,
-                                        showId: review.showId,
-                                        user: review.user))
-                    }
+                    reviews.removeAll()
+                    reviews = response.reviews
+                    setupTableView()
                     showDetailsTableView.reloadData()
                 case .failure(let error):
                     print("Error \(error)")
@@ -87,7 +107,7 @@ extension ShowDetailsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         if section == 0 {
-            return 0
+            return 1
         } else {
             return reviews.count
         }
@@ -104,11 +124,11 @@ extension ShowDetailsViewController: UITableViewDataSource {
             withIdentifier: String(describing: ShowReviewTableViewCell.self),
             for: indexPath
         ) as! ShowReviewTableViewCell
-
+        
         cellDescription.configure(with: selectedShow!)
         cellReview.configure(with: reviews[indexPath.row])
         
-        if indexPath.row == 0 {
+        if indexPath.row == 0 && indexPath.section == 0 {
             return cellDescription
         } else {
             return cellReview
@@ -119,8 +139,11 @@ extension ShowDetailsViewController: UITableViewDataSource {
 // MARK: - Private
 private extension ShowDetailsViewController {
 
+    func setupUI() {
+        writeReviewButton.applyCornerRadius(of: 21.5)
+    }
+    
     func setupTableView() {
-        print("SETTING UP TABLE VIEW")
         showDetailsTableView.estimatedRowHeight = 110
         showDetailsTableView.rowHeight = UITableView.automaticDimension
 

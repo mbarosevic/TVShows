@@ -6,15 +6,16 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ShowDescriptionTableViewCell: UITableViewCell {
 
 
-    @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var showImageView: UIImageView!
     @IBOutlet weak var showDescriptionTextView: UITextView!
     @IBOutlet weak var showReviewsLabel: UILabel!
     @IBOutlet weak var showStarsRating: RatingPredefinedController!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
@@ -22,7 +23,6 @@ final class ShowDescriptionTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        showTitleLabel.text = nil
         showImageView.image = nil
         showDescriptionTextView.text = nil
         showReviewsLabel.text = nil
@@ -34,10 +34,17 @@ final class ShowDescriptionTableViewCell: UITableViewCell {
 extension ShowDescriptionTableViewCell {
 
     func configure(with item: Show) {
-        showTitleLabel.text = item.title
-        showImageView.image = UIImage(named: "icImagePlaceholder")
+        showImageView.kf.setImage(
+            with:
+                URL(
+                    string: item.imageUrl),
+            placeholder:
+                UIImage(
+                    named: "icImagePlaceholder")
+        )
+        
         showDescriptionTextView.text = item.description
-
+        print("Average rating: \(item.averageRating ?? 0.33)")
         if let averageRating = item.averageRating {
             showStarsRating.setStarsRating(rating: Int(round(averageRating)))
             showReviewsLabel.text = "\(item.numOfReviews) REVIEWS, \(averageRating) AVERAGE"
@@ -51,7 +58,7 @@ private extension ShowDescriptionTableViewCell {
 
     func setupUI() {
         showDescriptionTextView.isUserInteractionEnabled = false
-        showImageView.layer.cornerRadius = 20
+        showImageView.layer.cornerRadius = 10
         showImageView.layer.masksToBounds = true
     }
 }
@@ -81,7 +88,7 @@ class RatingPredefinedController: UIStackView {
             if let button = subView as? UIButton{
                 if button.tag > starsRating {
                     button.setImage(UIImage(named: starsEmptyPicName), for: .normal)
-                }else{
+                } else {
                     button.setImage(UIImage(named: starsFilledPicName), for: .normal)
                 }
             }

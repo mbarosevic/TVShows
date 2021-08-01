@@ -20,6 +20,7 @@ final class ShowsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getShows()
+        setNavigationItem()
         setupTableView()
     }
     
@@ -43,6 +44,43 @@ final class ShowsViewController: UIViewController {
 
 private extension ShowsViewController {
 
+    func setNavigationItem() {
+        let profileButton = UIBarButtonItem(
+            image: UIImage(named: "ic-profile"),
+            style: .plain,
+            target: self,
+            action: #selector(test)
+        )
+        profileButton.tintColor = hexStringToUIColor(hex: "#52368C")
+        self.navigationItem.rightBarButtonItem = profileButton
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    @objc func test() {
+        print("test")
+    }
+    
     func setupTableView() {
         //tableView.estimatedRowHeight = 110
         //tableView.rowHeight = UITableView.automaticDimension

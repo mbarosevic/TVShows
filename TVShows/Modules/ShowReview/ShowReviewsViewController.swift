@@ -16,6 +16,7 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var submitReviewButton: UIButton!
     @IBOutlet weak var commentTextView: UITextView!
     
+
     var selectedShow: Show?
     
     override func viewDidLoad() {
@@ -23,11 +24,11 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
         setupUI()
     }
     
-    @IBAction func closeModal(_ sender: Any) {
+    @IBAction func closeModal() {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func submitReview(_ sender: Any) {
+    @IBAction func submitReview() {
         guard let comment = commentTextView.text, !comment.isEmpty, comment != "Enter your comment here..." else {
             showAlertWith(message: "Please write a comment")
             return
@@ -38,19 +39,21 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
             return
         }
         
-        APIManager.shared.submitReview(
-            with: ReviewParameters(comment: comment, rating: String(ratingValue.starsRating), show_id: selectedShow!.id),
-            completion: { dataResponse in
-                SVProgressHUD.dismiss()
+        print("Making api call")
+        print("Comment: \(comment), Rating: \(ratingValue.starsRating), showID: \(selectedShow!.id)")
+        
+        APIManager.shared.submitReview(comment: comment, rating: String(ratingValue.starsRating), showId: selectedShow!.id,
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                //self.hideLoading()
                 switch dataResponse.result {
-                case .success(let response):
-                    print(response)
+                case .success:
+                    NotificationCenter.default.post(name: NSNotification.Name("NSNotif"), object: nil)
                 case .failure(let error):
-                    print("Error \(error)")
+                    self.showFailure(with: error)
                 }
             }
         )
-        
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -70,6 +73,10 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.text = nil
         textView.textColor = .black
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        
     }
 }
 
@@ -110,5 +117,10 @@ class RatingController: UIStackView {
         setStarsRating(rating: sender.tag)
     }
 }
+
+extension ShowReviewsViewController: ProgressReporting {
+    
+}
+
 
 
