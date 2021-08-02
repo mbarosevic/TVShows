@@ -78,7 +78,12 @@ private extension ShowsViewController {
     }
     
     @objc func profileDetailsActionHandler() {
+        print("Going to my account screen")
         
+        let storyboard = UIStoryboard(name: "Account", bundle: .main)
+        let accountViewController = storyboard.instantiateViewController(
+            withIdentifier: String(describing: AccountViewController.self)) as! AccountViewController
+        self.present(accountViewController, animated: true, completion: nil)
     }
     
     private func setupTableView() {

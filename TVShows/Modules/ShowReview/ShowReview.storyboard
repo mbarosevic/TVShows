@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -15,45 +15,45 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SkO-jl-gLW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="ShowReviewsViewController" title="Write a Review" id="Oq9-Ud-OwS" customClass="ShowReviewsViewController" customModule="TV_Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="19M-20-FGJ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="CUn-an-E8h">
-                                <rect key="frame" x="20" y="127" width="240" height="88.5"/>
+                                <rect key="frame" x="20" y="127" width="216" height="88.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLL-LA-uUX">
-                                        <rect key="frame" x="0.0" y="0.0" width="240" height="8.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="216" height="8.6666666666666661"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="wGc-Oc-uN3" customClass="RatingController" customModule="TV_Shows" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28.5" width="240" height="40"/>
+                                        <rect key="frame" x="0.0" y="28.666666666666657" width="216" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iyb-HD-D2k">
-                                                <rect key="frame" x="0.0" y="0.0" width="64" height="40"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                                 <state key="normal" image="button:iyb-HD-D2k:image"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6n-ir-Vze">
-                                                <rect key="frame" x="68" y="0.0" width="40" height="40"/>
+                                                <rect key="frame" x="44" y="0.0" width="40" height="40"/>
                                                 <state key="normal" image="button:iyb-HD-D2k:image"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="64L-OJ-uzZ">
-                                                <rect key="frame" x="112" y="0.0" width="40" height="40"/>
+                                                <rect key="frame" x="88" y="0.0" width="40" height="40"/>
                                                 <state key="normal" image="button:iyb-HD-D2k:image"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nd3-zQ-HdR">
-                                                <rect key="frame" x="156" y="0.0" width="40" height="40"/>
+                                                <rect key="frame" x="132" y="0.0" width="40" height="40"/>
                                                 <state key="normal" image="button:iyb-HD-D2k:image"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNn-YS-YDR">
-                                                <rect key="frame" x="200" y="0.0" width="40" height="40"/>
+                                                <rect key="frame" x="176" y="0.0" width="40" height="40"/>
                                                 <state key="normal" image="button:iyb-HD-D2k:image"/>
                                             </button>
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Comment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jvb-Y5-B33">
-                                        <rect key="frame" x="0.0" y="88.5" width="240" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="88.666666666666657" width="216" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -61,10 +61,10 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="Zv7-Fb-dwO">
-                                <rect key="frame" x="20" y="237" width="374" height="406"/>
+                                <rect key="frame" x="20" y="237" width="350" height="354"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter your comment here..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5re-Eb-e0f">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="318"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="266"/>
                                         <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -74,7 +74,7 @@
                                         </connections>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lSO-YD-weL">
-                                        <rect key="frame" x="0.0" y="358" width="374" height="48"/>
+                                        <rect key="frame" x="0.0" y="306" width="350" height="48"/>
                                         <color key="backgroundColor" red="0.32156862749999998" green="0.21176470589999999" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="I3U-Kt-51r"/>
@@ -102,7 +102,6 @@
                             <constraint firstItem="UUw-i2-gSq" firstAttribute="trailing" secondItem="CUn-an-E8h" secondAttribute="trailing" constant="154" id="hWj-6j-94t"/>
                             <constraint firstItem="UUw-i2-gSq" firstAttribute="bottom" secondItem="Zv7-Fb-dwO" secondAttribute="bottom" constant="219" id="kXf-uc-fJb"/>
                             <constraint firstItem="Zv7-Fb-dwO" firstAttribute="centerX" secondItem="19M-20-FGJ" secondAttribute="centerX" id="pPE-OS-Tk3"/>
-                            <constraint firstItem="UUw-i2-gSq" firstAttribute="trailing" secondItem="Zv7-Fb-dwO" secondAttribute="trailing" constant="20" id="pRr-CD-iXM"/>
                             <constraint firstItem="Zv7-Fb-dwO" firstAttribute="leading" secondItem="CUn-an-E8h" secondAttribute="leading" id="vPV-cN-zdm"/>
                             <constraint firstItem="CUn-an-E8h" firstAttribute="leading" secondItem="UUw-i2-gSq" secondAttribute="leading" constant="20" id="xBL-EO-27q"/>
                         </constraints>
@@ -131,7 +130,7 @@
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="aOU-Be-UFs" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ww2-hI-Gv3">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

@@ -63,7 +63,7 @@ final class LoginViewController: UIViewController {
                 case .success(let response):
                     self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
-                    self.handleSuccesfulLogin(for: response.user, headers: headers)
+                    self.handleSuccesfulLogin(for: response.user, headers: headers, storeData: self.rememberMe)
                 case .failure(let error):
                     self.showFailure(with: error)
                 }
@@ -92,7 +92,7 @@ final class LoginViewController: UIViewController {
                 case .success(let response):
                     self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
-                    self.handleSuccesfulLogin(for: response.user, headers: headers)
+                    self.handleSuccesfulLogin(for: response.user, headers: headers, storeData: self.rememberMe)
                 case .failure(let error):
                     print("Error \(error)")
                     self.showFailure(with: error)
@@ -126,7 +126,7 @@ final class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
     }
 
-    private func handleSuccesfulLogin(for user: User, headers: [String: String]) {
+    private func handleSuccesfulLogin(for user: User, headers: [String: String], storeData: Bool) {
         guard let authInfo = try? AuthInfo(headers: headers) else {
             SVProgressHUD.showError(withStatus: "Missing headers")
             return
@@ -138,7 +138,21 @@ final class LoginViewController: UIViewController {
         }
         UserData.sharedInstance.user = loginInfo
         UserData.sharedInstance.authInfo = authInfo
+        
+        if storeData {
+            // store authInfo and loginInfo in keychain
+            saveDataInKeychain(authInfo: authInfo)
+        }
+        
         goToHomeScreen()
+    }
+    
+    func saveDataInKeychain(authInfo: AuthInfo) {
+        KeychainManager.shared.accessToken = authInfo.accessToken
+        KeychainManager.shared.client = authInfo.client
+        KeychainManager.shared.tokenType = authInfo.tokenType
+        KeychainManager.shared.expiry = authInfo.expiry
+        KeychainManager.shared.uid = authInfo.uid
     }
     
     private func goToHomeScreen() {
