@@ -44,12 +44,8 @@ extension ShowTableViewCell {
 
     func configure(with item: Show) {
         showImageView.kf.setImage(
-            with:
-                URL(
-                    string: item.imageUrl),
-            placeholder:
-                UIImage(
-                    named: "ic-show-placeholder-vertical")
+            with: URL(string: item.imageUrl),
+            placeholder: UIImage(named: "ic-show-placeholder-vertical")
         )
         titleLabel.text = item.title
     }

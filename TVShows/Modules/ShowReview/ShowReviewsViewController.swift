@@ -9,14 +9,13 @@ import Foundation
 import UIKit
 import SVProgressHUD
 
-class ShowReviewsViewController: UIViewController, UITextViewDelegate {
+final class ShowReviewsViewController: UIViewController {
     
-    @IBOutlet weak var closeModalButton: UIBarButtonItem!
-    @IBOutlet weak var rating: RatingController!
-    @IBOutlet weak var submitReviewButton: UIButton!
-    @IBOutlet weak var commentTextView: UITextView!
+    @IBOutlet private weak var closeModalButton: UIBarButtonItem!
+    @IBOutlet private weak var rating: RatingController!
+    @IBOutlet private weak var submitReviewButton: UIButton!
+    @IBOutlet private weak var commentTextView: UITextView!
     
-
     var selectedShow: Show?
     
     override func viewDidLoad() {
@@ -24,28 +23,46 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
         setupUI()
     }
     
-    @IBAction func closeModal() {
+    @IBAction private func closeModal() {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func submitReview() {
+    @IBAction private func submitReview() {
         guard let comment = commentTextView.text, !comment.isEmpty, comment != "Enter your comment here..." else {
-            showAlertWith(message: "Please write a comment")
+            self.showFailure(with: "Error", message: "Please write a comment")
             return
         }
         
         guard let ratingValue = rating, rating.starsRating != 0 else {
-            showAlertWith(message: "Please rate the show with stars")
+            self.showFailure(with: "Error", message: "Please rate the show with stars")
             return
         }
         
-        print("Making api call")
-        print("Comment: \(comment), Rating: \(ratingValue.starsRating), showID: \(selectedShow!.id)")
+        guard let showId = selectedShow?.id else {
+            self.showFailure(with: "Error", message: "Bad request")
+            return
+        }
         
-        APIManager.shared.submitReview(comment: comment, rating: String(ratingValue.starsRating), showId: selectedShow!.id,
+        submitReview(for: showId, with: comment, with: String(ratingValue.starsRating))
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ShowReviewsViewController {
+    
+    private func setupUI() {
+        commentTextView.delegate = self
+        submitReviewButton.applyCornerRadius(of: 21.5)
+        commentTextView.layer.cornerRadius = 5
+    }
+    
+    private func submitReview(for showId: String, with comment: String, with rating: String) {
+        self.showLoading()
+        APIManager.shared.submitReview(comment: comment, rating: rating, showId: showId,
             completion: { [weak self] dataResponse in
                 guard let self = self else { return }
-                //self.hideLoading()
+                self.hideLoading()
                 switch dataResponse.result {
                 case .success:
                     NotificationCenter.default.post(name: NSNotification.Name("NSNotif"), object: nil)
@@ -54,21 +71,10 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
                 }
             }
         )
-        self.dismiss(animated: true, completion: nil)
     }
-    
-    private func showAlertWith(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(alert, animated: true)
-    }
-    
-    
-    private func setupUI() {
-        commentTextView.delegate = self
-        submitReviewButton.applyCornerRadius(of: 21.5)
-        commentTextView.layer.cornerRadius = 5
-    }
+}
+
+extension ShowReviewsViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.text = nil
@@ -78,6 +84,10 @@ class ShowReviewsViewController: UIViewController, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         
     }
+}
+
+extension ShowReviewsViewController: ProgressReporting {
+    
 }
 
 class RatingController: UIStackView {
@@ -106,7 +116,7 @@ class RatingController: UIStackView {
             if let button = subView as? UIButton{
                 if button.tag > starsRating {
                     button.setImage(UIImage(named: starsEmptyPicName), for: .normal)
-                }else{
+                } else {
                     button.setImage(UIImage(named: starsFilledPicName), for: .normal)
                 }
             }
@@ -118,9 +128,7 @@ class RatingController: UIStackView {
     }
 }
 
-extension ShowReviewsViewController: ProgressReporting {
-    
-}
+
 
 
 

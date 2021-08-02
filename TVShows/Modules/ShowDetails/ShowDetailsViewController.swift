@@ -11,8 +11,8 @@ import SVProgressHUD
 
 final class ShowDetailsViewController: UIViewController {
 
-    @IBOutlet weak var showDetailsTableView: UITableView!
-    @IBOutlet weak var writeReviewButton: UIButton!
+    @IBOutlet private weak var showDetailsTableView: UITableView!
+    @IBOutlet private weak var writeReviewButton: UIButton!
 
     var selectedShow: Show?
     private var reviews = [Review]()
@@ -22,11 +22,10 @@ final class ShowDetailsViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didWriteAReview), name:NSNotification.Name("NSNotif"), object: nil)
 
         guard let show = selectedShow, selectedShow != nil else {
-            print("Error")
+            self.showFailure(with: "Error", message: "Bad request")
             return
         }
         print(show)
-        self.title = selectedShow?.title
         setupUI()
         getReviews()
     }
@@ -34,7 +33,7 @@ final class ShowDetailsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -47,53 +46,45 @@ final class ShowDetailsViewController: UIViewController {
         getShowAfterReview()
         getReviews()
     }
-
 }
 
 private extension ShowDetailsViewController {
     
-    func getShowAfterReview() {
+    private func getShowAfterReview() {
+        self.showLoading()
         APIManager.shared.fetchShow(for: selectedShow!.id,
             completion: { [weak self] dataResponse in
                 guard let self = self else { return }
-                //self.hideLoading()
+                self.hideLoading()
                 switch dataResponse.result {
                 case .success(let response):
                     // updated show (avg rating, num of comments)
                     self.selectedShow = response.show
                 case .failure(let error):
-                    print(error)
+                    self.showFailure(with: error)
                 }
             }
         )
     }
     
-    func getReviews(){
-        SVProgressHUD.show()
+    private func getReviews(){
+        self.showLoading()
         APIManager.shared.fetchReviews(
             for: selectedShow!.id,
-            completion: { [self] dataResponse in
-                SVProgressHUD.dismiss()
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                self.hideLoading()
                 switch dataResponse.result {
                 case .success(let response):
-                    reviews.removeAll()
-                    reviews = response.reviews
-                    setupTableView()
-                    showDetailsTableView.reloadData()
+                    self.reviews.removeAll()
+                    self.reviews = response.reviews
+                    self.setupTableView()
+                    self.showDetailsTableView.reloadData()
                 case .failure(let error):
-                    print("Error \(error)")
+                    self.showFailure(with: error)
                 }
             }
         )
-    }
-}
-
-extension ShowDetailsViewController: UITableViewDelegate {
-    
-    // MARK: - UITableViewDelegate
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
@@ -114,23 +105,21 @@ extension ShowDetailsViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellDescription = tableView.dequeueReusableCell(
-            withIdentifier: String(describing: ShowDescriptionTableViewCell.self),
-            for: indexPath
-        ) as! ShowDescriptionTableViewCell
-
-        
-        let cellReview = tableView.dequeueReusableCell(
-            withIdentifier: String(describing: ShowReviewTableViewCell.self),
-            for: indexPath
-        ) as! ShowReviewTableViewCell
-        
-        cellDescription.configure(with: selectedShow!)
-        cellReview.configure(with: reviews[indexPath.row])
-        
         if indexPath.row == 0 && indexPath.section == 0 {
+            let cellDescription = tableView.dequeueReusableCell(
+                withIdentifier: String(describing: ShowDescriptionTableViewCell.self),
+                for: indexPath
+            ) as! ShowDescriptionTableViewCell
+            cellDescription.configure(with: selectedShow!)
+            
             return cellDescription
         } else {
+            let cellReview = tableView.dequeueReusableCell(
+                withIdentifier: String(describing: ShowReviewTableViewCell.self),
+                for: indexPath
+            ) as! ShowReviewTableViewCell
+            cellReview.configure(with: reviews[indexPath.row])
+
             return cellReview
         }
     }
@@ -139,19 +128,24 @@ extension ShowDetailsViewController: UITableViewDataSource {
 // MARK: - Private
 private extension ShowDetailsViewController {
 
-    func setupUI() {
+    private func setupUI() {
+        self.title = selectedShow?.title
         writeReviewButton.applyCornerRadius(of: 21.5)
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         showDetailsTableView.estimatedRowHeight = 110
         showDetailsTableView.rowHeight = UITableView.automaticDimension
 
         showDetailsTableView.tableFooterView = UIView()
 
-        showDetailsTableView.delegate = self
         showDetailsTableView.dataSource = self
     }
 }
+
+extension ShowDetailsViewController: ProgressReporting {
+    
+}
+
 
 

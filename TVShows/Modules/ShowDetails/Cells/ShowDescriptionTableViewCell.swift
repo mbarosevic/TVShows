@@ -10,11 +10,10 @@ import Kingfisher
 
 final class ShowDescriptionTableViewCell: UITableViewCell {
 
-
-    @IBOutlet weak var showImageView: UIImageView!
-    @IBOutlet weak var showDescriptionTextView: UITextView!
-    @IBOutlet weak var showReviewsLabel: UILabel!
-    @IBOutlet weak var showStarsRating: RatingPredefinedController!
+    @IBOutlet private weak var showImageView: UIImageView!
+    @IBOutlet private weak var showDescriptionTextView: UITextView!
+    @IBOutlet private weak var showReviewsLabel: UILabel!
+    @IBOutlet private weak var showStarsRating: RatingPredefinedController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,12 +34,8 @@ extension ShowDescriptionTableViewCell {
 
     func configure(with item: Show) {
         showImageView.kf.setImage(
-            with:
-                URL(
-                    string: item.imageUrl),
-            placeholder:
-                UIImage(
-                    named: "ic-show-placeholder-rectangle")
+            with: URL(string: item.imageUrl),
+            placeholder: UIImage(named: "ic-show-placeholder-rectangle")
         )
         
         showDescriptionTextView.text = item.description
@@ -53,10 +48,9 @@ extension ShowDescriptionTableViewCell {
 }
 
 // MARK: - Private
-
 private extension ShowDescriptionTableViewCell {
 
-    func setupUI() {
+    private func setupUI() {
         showDescriptionTextView.isUserInteractionEnabled = false
         showImageView.layer.cornerRadius = 10
         showImageView.layer.masksToBounds = true
@@ -64,6 +58,7 @@ private extension ShowDescriptionTableViewCell {
 }
 
 class RatingPredefinedController: UIStackView {
+    
     var starsRating = 0
     var starsEmptyPicName = "ic-star-deselected-large"
     var starsFilledPicName = "ic-star-selected-large"

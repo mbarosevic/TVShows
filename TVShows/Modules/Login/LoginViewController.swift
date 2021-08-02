@@ -42,59 +42,60 @@ final class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func didTapLoginButton() {
+    @IBAction private func didTapLoginButton() {
         guard let email = emailInputTextField.text, !email.isEmpty else {
-            showAlertWith(message: "Please enter your email")
+            self.showFailure(with: "Error", message: "Please enter your email")
             return
         }
         
         guard let password = passwordInputTextField.text, !password.isEmpty else {
-            showAlertWith(message: "Please enter your password")
+            self.showFailure(with: "Error", message: "Please enter your password")
             return
         }
         
-        SVProgressHUD.show()
+        self.showLoading()
         APIManager.shared.loginUser(
             with: UserParameters(password: password, email: email),
-            completion: { [self] dataResponse in
-                SVProgressHUD.dismiss()
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                self.hideLoading()
                 switch dataResponse.result {
                 case .success(let response):
-                    loggedInUser = response.user
+                    self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
-                    handleSuccesfulLogin(for: response.user, headers: headers)
+                    self.handleSuccesfulLogin(for: response.user, headers: headers)
                 case .failure(let error):
-                    print("Error \(error)")
-                    showAlertWith(message: "Login failed")
+                    self.showFailure(with: error)
                 }
             }
         )
     }
      
-    @IBAction func didTapRegisterButton() {
+    @IBAction private func didTapRegisterButton() {
         guard let email = emailInputTextField.text, !email.isEmpty else {
-            showAlertWith(message: "Please enter your email")
+            self.showFailure(with: "Error", message: "Please enter your email")
             return
         }
         
         guard let password = passwordInputTextField.text, !password.isEmpty else {
-            showAlertWith(message: "Please enter your password")
+            self.showFailure(with: "Error", message: "Please enter your password")
             return
         }
         
-        SVProgressHUD.show()
+        self.showLoading()
         APIManager.shared.registerUser(
             with: UserParameters(password: password, email: email),
-            completion: { [self] dataResponse in
-                SVProgressHUD.dismiss()
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                self.hideLoading()
                 switch dataResponse.result {
                 case .success(let response):
-                    loggedInUser = response.user
+                    self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
-                    handleSuccesfulLogin(for: response.user, headers: headers)
+                    self.handleSuccesfulLogin(for: response.user, headers: headers)
                 case .failure(let error):
                     print("Error \(error)")
-                    showAlertWith(message: "Registration failed")
+                    self.showFailure(with: error)
                 }
             }
         )
@@ -106,12 +107,6 @@ final class LoginViewController: UIViewController {
         } else {
             return false
         }
-    }
-    
-    private func showAlertWith(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(alert, animated: true)
     }
     
     private func applyDesignChanges() {
@@ -183,4 +178,8 @@ extension UIButton {
     func applyCornerRadius(of radius: CGFloat) {
         layer.cornerRadius = radius
     }
+}
+
+extension LoginViewController: ProgressReporting {
+    
 }

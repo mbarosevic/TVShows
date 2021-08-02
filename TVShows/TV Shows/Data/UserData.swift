@@ -11,4 +11,7 @@ final class UserData {
     static let sharedInstance = UserData()
     var user: User?
     var authInfo: AuthInfo?
+    
+    private init () {
+    }
 }

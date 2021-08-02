@@ -27,7 +27,7 @@ final class ShowsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -44,7 +44,7 @@ final class ShowsViewController: UIViewController {
 
 private extension ShowsViewController {
 
-    func setNavigationItem() {
+    private func setNavigationItem() {
         let profileButton = UIBarButtonItem(
             image: UIImage(named: "ic-profile"),
             style: .plain,
@@ -55,7 +55,7 @@ private extension ShowsViewController {
         self.navigationItem.rightBarButtonItem = profileButton
     }
     
-    func hexStringToUIColor (hex:String) -> UIColor {
+    private func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
 
         if (cString.hasPrefix("#")) {
@@ -81,7 +81,7 @@ private extension ShowsViewController {
         
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         //tableView.estimatedRowHeight = 110
         //tableView.rowHeight = UITableView.automaticDimension
 
@@ -94,19 +94,18 @@ private extension ShowsViewController {
 
 private extension ShowsViewController {
     
-    func getShows() {
-        //showLoading()
+    private func getShows() {
+        self.showLoading()
         APIManager.shared.fetchShows(
             completion: { [weak self] dataResponse in
                 guard let self = self else { return }
-                //self.hideLoading()
+                self.hideLoading()
                 switch dataResponse.result {
                 case .success(let response):
                     self.shows = response.shows
                     self.tableView.reloadData()
                 case .failure(let error):
-                    print(error)
-                    //self.showFailure(with: error)
+                    self.showFailure(with: error)
                 }
             }
         )

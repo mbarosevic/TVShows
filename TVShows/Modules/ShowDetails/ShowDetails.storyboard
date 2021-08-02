@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="787"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShowDescriptionTableViewCell" rowHeight="579" id="p5z-GV-9XK" customClass="ShowDescriptionTableViewCell" customModule="TV_Shows" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShowDescriptionTableViewCell" rowHeight="579" id="p5z-GV-9XK" customClass="ShowDescriptionTableViewCell" customModule="TV_Shows" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="24.5" width="414" height="579"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="p5z-GV-9XK" id="k48-qa-n3T">
@@ -114,7 +114,7 @@
                                             <outlet property="showStarsRating" destination="2pV-H4-K5X" id="Ycl-4R-JOP"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShowReviewTableViewCell" rowHeight="123" id="i9v-a2-eVg" customClass="ShowReviewTableViewCell" customModule="TV_Shows" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShowReviewTableViewCell" rowHeight="123" id="i9v-a2-eVg" customClass="ShowReviewTableViewCell" customModule="TV_Shows" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="603.5" width="414" height="123"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i9v-a2-eVg" id="qaO-IK-XFW">
