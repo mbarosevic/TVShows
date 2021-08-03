@@ -19,6 +19,7 @@ final class ShowsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogout), name:NSNotification.Name("Logout"), object: nil)
         getShows()
         setNavigationItem()
         setupTableView()
@@ -38,6 +39,8 @@ final class ShowsViewController: UIViewController {
         let secondViewController = segue.destination as! ShowDetailsViewController
         secondViewController.selectedShow = selectedShow
     }
+    
+
 }
 
 // MARK: - Private
@@ -83,7 +86,18 @@ private extension ShowsViewController {
         let storyboard = UIStoryboard(name: "Account", bundle: .main)
         let accountViewController = storyboard.instantiateViewController(
             withIdentifier: String(describing: AccountViewController.self)) as! AccountViewController
-        self.present(accountViewController, animated: true, completion: nil)
+        //self.present(accountViewController, animated: true, completion: nil)
+        
+        
+        
+        let navigationController = UINavigationController(rootViewController: accountViewController)
+        self.present(navigationController, animated: true, completion: nil)
+    }
+    
+    @objc func didLogout() {
+        let storyboard = UIStoryboard(name: "Login", bundle: .main)
+        let loginViewController = storyboard.instantiateViewController(withIdentifier: String(describing: LoginViewController.self)) as! LoginViewController
+        navigationController?.setViewControllers([loginViewController], animated: false)
     }
     
     private func setupTableView() {

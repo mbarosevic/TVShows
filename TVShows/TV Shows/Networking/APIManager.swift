@@ -155,4 +155,45 @@ class APIManager {
             completionHandler: completion)
                     
     }
+    
+    // MARK: - Fetch User Data
+    func fetchUserData(
+        completion: @escaping (AFDataResponse<LoginResponse>) -> Void
+    ) {
+        sessionManager.request(
+            "https://tv-shows.infinum.academy/users/me",
+            method: .get,
+            headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+        )
+        .validate()
+        .responseDecodable(of: LoginResponse.self, completionHandler: completion)
+    }
+    
+    func uploadImage(_ image: UIImage) {
+       guard let imageData = image.jpegData(compressionQuality: 0.9) else { return }
+       let requestData = MultipartFormData()
+       requestData.append(
+           imageData,
+           withName: "image",
+           fileName: "image.jpeg",
+           mimeType: "image/jpeg"
+       )
+       AF
+           .upload(
+               multipartFormData: requestData,
+               to: "https://tv-shows.infinum.academy/users",
+               method: .put,
+               headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
+           )
+           .validate()
+           .responseDecodable(of: LoginResponse.self) { [weak self] dataResponse in
+               guard let self = self else { return }
+               switch dataResponse.result {
+               case .success(let response):
+                    print(response)
+               case .failure(let error):
+                   print("Failure: \(error)")
+               }
+           }
+   }
 }

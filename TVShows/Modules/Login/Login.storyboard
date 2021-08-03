@@ -156,6 +156,7 @@
                         <outlet property="emailInputTextField" destination="2Pf-UQ-Spj" id="TMi-NW-M0c"/>
                         <outlet property="loginButton" destination="eqG-BP-Ezg" id="grJ-nD-w2H"/>
                         <outlet property="passwordInputTextField" destination="76l-p5-Bqc" id="Ofk-n8-M4p"/>
+                        <outlet property="registerButton" destination="z5w-sO-RLj" id="3u4-Oz-AYD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

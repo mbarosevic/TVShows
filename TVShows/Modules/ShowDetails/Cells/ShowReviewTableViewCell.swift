@@ -51,7 +51,7 @@ extension ShowReviewTableViewCell {
 private extension ShowReviewTableViewCell {
 
     private func setupUI() {
-        userImageView.layer.cornerRadius = 20
+        userImageView.layer.cornerRadius = 25
         userImageView.layer.masksToBounds = true
     }
 }

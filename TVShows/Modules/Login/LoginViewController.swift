@@ -15,6 +15,7 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var passwordInputTextField: UITextField!
     @IBOutlet private weak var checkboxButton: UIButton!
     @IBOutlet private weak var loginButton: UIButton!
+    @IBOutlet private weak var registerButton: UIButton!
     
     private var loggedInUser: User?
     private var rememberMe: Bool = false
@@ -64,8 +65,8 @@ final class LoginViewController: UIViewController {
                     self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
                     self.handleSuccesfulLogin(for: response.user, headers: headers, storeData: self.rememberMe)
-                case .failure(let error):
-                    self.showFailure(with: error)
+                case .failure:
+                    self.loginButton.shake()
                 }
             }
         )
@@ -93,9 +94,8 @@ final class LoginViewController: UIViewController {
                     self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
                     self.handleSuccesfulLogin(for: response.user, headers: headers, storeData: self.rememberMe)
-                case .failure(let error):
-                    print("Error \(error)")
-                    self.showFailure(with: error)
+                case .failure:
+                    self.registerButton.shake()
                 }
             }
         )
@@ -192,6 +192,14 @@ extension UIButton {
     func applyCornerRadius(of radius: CGFloat) {
         layer.cornerRadius = radius
     }
+    
+    func shake() {
+            let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+            animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+            animation.duration = 0.6
+            animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
+            layer.add(animation, forKey: "shake")
+        }
 }
 
 extension LoginViewController: ProgressReporting {

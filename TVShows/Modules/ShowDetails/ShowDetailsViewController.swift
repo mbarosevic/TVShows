@@ -61,6 +61,7 @@ private extension ShowDetailsViewController {
                     // updated show (avg rating, num of comments)
                     self.selectedShow = response.show
                 case .failure(let error):
+                    print("Puklo1")
                     self.showFailure(with: error)
                 }
             }
@@ -81,6 +82,7 @@ private extension ShowDetailsViewController {
                     self.setupTableView()
                     self.showDetailsTableView.reloadData()
                 case .failure(let error):
+                    print("Puklo2")
                     self.showFailure(with: error)
                 }
             }
