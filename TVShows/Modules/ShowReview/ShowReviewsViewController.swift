@@ -30,16 +30,19 @@ final class ShowReviewsViewController: UIViewController {
     @IBAction private func submitReview() {
         guard let comment = commentTextView.text, !comment.isEmpty, comment != "Enter your comment here..." else {
             self.showFailure(with: "Error", message: "Please write a comment")
+            submitReviewButton.shake()
             return
         }
         
         guard let ratingValue = rating, rating.starsRating != 0 else {
             self.showFailure(with: "Error", message: "Please rate the show with stars")
+            submitReviewButton.shake()
             return
         }
         
         guard let showId = selectedShow?.id else {
             self.showFailure(with: "Error", message: "Bad request")
+            submitReviewButton.shake()
             return
         }
         

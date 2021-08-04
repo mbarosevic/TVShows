@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vgE-MV-NjW">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--My Account-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="AccountViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="AccountViewController" customModule="TV_Shows" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ios.team@infinum.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m33-VK-K9L">
+                                <rect key="frame" x="16" y="110" width="346" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="346" id="1Eo-IO-4th"/>
+                                    <constraint firstAttribute="height" constant="41" id="Ev1-uH-kfo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic-profile-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="OXx-cE-xS4">
+                                <rect key="frame" x="16" y="171" width="100" height="125"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="125" id="LUl-bd-COM"/>
+                                    <constraint firstAttribute="width" constant="100" id="UMt-XN-rl4"/>
+                                </constraints>
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ZU-lF-rOW">
+                                <rect key="frame" x="154" y="204.66666666666666" width="167" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Change Profile Photo">
+                                    <color key="titleColor" red="0.32156862749999998" green="0.21176470589999999" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeProfilePhotoButtonTap" destination="Y6W-OH-hqX" eventType="touchUpInside" id="xbZ-4J-ETA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kps-Dz-VeS">
+                                <rect key="frame" x="20" y="323" width="350" height="48"/>
+                                <color key="backgroundColor" red="0.32156862749999998" green="0.21176470589999999" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="7LU-sU-tVI"/>
+                                    <constraint firstAttribute="width" constant="350" id="an9-or-UYV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Logout">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="logoutUser" destination="Y6W-OH-hqX" eventType="touchUpInside" id="7wP-cs-WtG"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="m33-VK-K9L" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="6OC-Ty-YEp"/>
+                            <constraint firstItem="OXx-cE-xS4" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="7gY-bt-ceO"/>
+                            <constraint firstItem="8ZU-lF-rOW" firstAttribute="leading" secondItem="OXx-cE-xS4" secondAttribute="trailing" constant="38" id="8oR-Oc-4is"/>
+                            <constraint firstItem="OXx-cE-xS4" firstAttribute="top" secondItem="m33-VK-K9L" secondAttribute="bottom" constant="20" id="AQb-Y1-3ol"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="kps-Dz-VeS" secondAttribute="bottom" constant="439" id="JEo-WR-k6G"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="m33-VK-K9L" secondAttribute="trailing" constant="28" id="QDg-Us-bhR"/>
+                            <constraint firstItem="m33-VK-K9L" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="22" id="Xx2-gl-V0a"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="8ZU-lF-rOW" secondAttribute="trailing" constant="69" id="s3S-5c-HXM"/>
+                            <constraint firstItem="8ZU-lF-rOW" firstAttribute="top" secondItem="m33-VK-K9L" secondAttribute="bottom" constant="53.670000000000002" id="s8s-Jn-DRJ"/>
+                            <constraint firstItem="kps-Dz-VeS" firstAttribute="top" secondItem="OXx-cE-xS4" secondAttribute="bottom" constant="27" id="tCT-pN-PjI"/>
+                            <constraint firstItem="kps-Dz-VeS" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="xDW-Rl-g1t"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="kps-Dz-VeS" secondAttribute="trailing" constant="20" id="xg0-lj-xCZ"/>
+                            <constraint firstItem="kps-Dz-VeS" firstAttribute="top" secondItem="8ZU-lF-rOW" secondAttribute="bottom" constant="85.329999999999998" id="zCn-HV-kfu"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="My Account" id="o7J-7g-XHL">
+                        <barButtonItem key="leftBarButtonItem" title="Close" id="1x5-OP-HMj">
+                            <connections>
+                                <action selector="closeButtonTap" destination="Y6W-OH-hqX" id="8dF-Hl-cGm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="changeProfilePhotoButton" destination="8ZU-lF-rOW" id="q0Y-G0-GEB"/>
+                        <outlet property="logoutButton" destination="kps-Dz-VeS" id="X7C-OJ-Yuk"/>
+                        <outlet property="profilePhotoImageView" destination="OXx-cE-xS4" id="Y5N-SS-j7v"/>
+                        <outlet property="userEmailLabel" destination="m33-VK-K9L" id="qAh-3o-Hdb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="921.53846153846155" y="38.388625592417057"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="1Fw-wh-kH7">
+            <objects>
+                <navigationController storyboardIdentifier="AccountNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="vgE-MV-NjW" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="OvF-hz-3pt">
+                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="JKC-xF-2pV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GbR-TX-wfS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="11.594202898550726" y="38.839285714285715"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic-profile-placeholder" width="150" height="150"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

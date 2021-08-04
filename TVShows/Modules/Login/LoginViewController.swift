@@ -15,6 +15,7 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var passwordInputTextField: UITextField!
     @IBOutlet private weak var checkboxButton: UIButton!
     @IBOutlet private weak var loginButton: UIButton!
+    @IBOutlet private weak var registerButton: UIButton!
     
     private var loggedInUser: User?
     private var rememberMe: Bool = false
@@ -23,8 +24,10 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         applyDesignChanges()
         
+        #if DEBUG
         emailInputTextField.text = "mbarosevic@gmail.com"
         passwordInputTextField.text = "tester1234"
+        #endif
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,9 +66,9 @@ final class LoginViewController: UIViewController {
                 case .success(let response):
                     self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
-                    self.handleSuccesfulLogin(for: response.user, headers: headers)
-                case .failure(let error):
-                    self.showFailure(with: error)
+                    self.handleSuccesfulLogin(for: response.user, headers: headers, storeData: self.rememberMe)
+                case .failure:
+                    self.loginButton.shake()
                 }
             }
         )
@@ -92,10 +95,9 @@ final class LoginViewController: UIViewController {
                 case .success(let response):
                     self.loggedInUser = response.user
                     let headers = dataResponse.response?.headers.dictionary ?? [:]
-                    self.handleSuccesfulLogin(for: response.user, headers: headers)
-                case .failure(let error):
-                    print("Error \(error)")
-                    self.showFailure(with: error)
+                    self.handleSuccesfulLogin(for: response.user, headers: headers, storeData: self.rememberMe)
+                case .failure:
+                    self.registerButton.shake()
                 }
             }
         )
@@ -126,7 +128,7 @@ final class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
     }
 
-    private func handleSuccesfulLogin(for user: User, headers: [String: String]) {
+    private func handleSuccesfulLogin(for user: User, headers: [String: String], storeData: Bool) {
         guard let authInfo = try? AuthInfo(headers: headers) else {
             SVProgressHUD.showError(withStatus: "Missing headers")
             return
@@ -138,7 +140,21 @@ final class LoginViewController: UIViewController {
         }
         UserData.sharedInstance.user = loginInfo
         UserData.sharedInstance.authInfo = authInfo
+        
+        if storeData {
+            // store authInfo and loginInfo in keychain
+            saveDataInKeychain(authInfo: authInfo)
+        }
+        
         goToHomeScreen()
+    }
+    
+    func saveDataInKeychain(authInfo: AuthInfo) {
+        KeychainManager.shared.accessToken = authInfo.accessToken
+        KeychainManager.shared.client = authInfo.client
+        KeychainManager.shared.tokenType = authInfo.tokenType
+        KeychainManager.shared.expiry = authInfo.expiry
+        KeychainManager.shared.uid = authInfo.uid
     }
     
     private func goToHomeScreen() {
@@ -178,6 +194,14 @@ extension UIButton {
     func applyCornerRadius(of radius: CGFloat) {
         layer.cornerRadius = radius
     }
+    
+    func shake() {
+            let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+            animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+            animation.duration = 0.6
+            animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
+            layer.add(animation, forKey: "shake")
+        }
 }
 
 extension LoginViewController: ProgressReporting {

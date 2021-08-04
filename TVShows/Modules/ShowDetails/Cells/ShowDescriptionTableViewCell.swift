@@ -39,7 +39,7 @@ extension ShowDescriptionTableViewCell {
         )
         
         showDescriptionTextView.text = item.description
-        print("Average rating: \(item.averageRating ?? 0.33)")
+        printDbg("Average rating: \(item.averageRating ?? 0.33)")
         if let averageRating = item.averageRating {
             showStarsRating.setStarsRating(rating: Int(round(averageRating)))
             showReviewsLabel.text = "\(item.numOfReviews) REVIEWS, \(averageRating) AVERAGE"
