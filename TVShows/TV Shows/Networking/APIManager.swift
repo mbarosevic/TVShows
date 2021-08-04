@@ -186,8 +186,7 @@ class APIManager {
                headers: HTTPHeaders((UserData.sharedInstance.authInfo?.headers)!)
            )
            .validate()
-           .responseDecodable(of: LoginResponse.self) { [weak self] dataResponse in
-               guard let self = self else { return }
+           .responseDecodable(of: LoginResponse.self) { dataResponse in
                switch dataResponse.result {
                case .success(let response):
                     print(response)

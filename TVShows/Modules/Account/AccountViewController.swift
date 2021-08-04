@@ -82,7 +82,7 @@ extension AccountViewController {
     internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            profilePhotoImageView.contentMode = .scaleAspectFit
+            profilePhotoImageView.contentMode = .scaleAspectFill
             profilePhotoImageView.image = image
             APIManager.shared.uploadImage(image)
         }
