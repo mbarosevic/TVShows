@@ -22,6 +22,9 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyDesignChanges()
+        
+        emailInputTextField.text = "mbarosevic@gmail.com"
+        passwordInputTextField.text = "tester1234"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,55 +42,60 @@ final class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func didTapLoginButton() {
+    @IBAction private func didTapLoginButton() {
         guard let email = emailInputTextField.text, !email.isEmpty else {
-            showAlertWith(message: "Please enter your email")
+            self.showFailure(with: "Error", message: "Please enter your email")
             return
         }
         
         guard let password = passwordInputTextField.text, !password.isEmpty else {
-            showAlertWith(message: "Please enter your password")
+            self.showFailure(with: "Error", message: "Please enter your password")
             return
         }
         
-        SVProgressHUD.show()
+        self.showLoading()
         APIManager.shared.loginUser(
             with: UserParameters(password: password, email: email),
-            completion: { response in
-                SVProgressHUD.dismiss()
-                switch response.result {
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                self.hideLoading()
+                switch dataResponse.result {
                 case .success(let response):
                     self.loggedInUser = response.user
-                    self.goToHomeScreen()
+                    let headers = dataResponse.response?.headers.dictionary ?? [:]
+                    self.handleSuccesfulLogin(for: response.user, headers: headers)
                 case .failure(let error):
-                    print("Error \(error)")
+                    self.showFailure(with: error)
                 }
             }
         )
     }
      
-    @IBAction func didTapRegisterButton() {
+    @IBAction private func didTapRegisterButton() {
         guard let email = emailInputTextField.text, !email.isEmpty else {
-            showAlertWith(message: "Please enter your email")
+            self.showFailure(with: "Error", message: "Please enter your email")
             return
         }
         
         guard let password = passwordInputTextField.text, !password.isEmpty else {
-            showAlertWith(message: "Please enter your password")
+            self.showFailure(with: "Error", message: "Please enter your password")
             return
         }
         
-        SVProgressHUD.show()
+        self.showLoading()
         APIManager.shared.registerUser(
             with: UserParameters(password: password, email: email),
-            completion: { response in
-                SVProgressHUD.dismiss()
-                switch response.result {
+            completion: { [weak self] dataResponse in
+                guard let self = self else { return }
+                self.hideLoading()
+                switch dataResponse.result {
                 case .success(let response):
                     self.loggedInUser = response.user
-                    self.goToHomeScreen()
+                    let headers = dataResponse.response?.headers.dictionary ?? [:]
+                    self.handleSuccesfulLogin(for: response.user, headers: headers)
                 case .failure(let error):
                     print("Error \(error)")
+                    self.showFailure(with: error)
                 }
             }
         )
@@ -99,12 +107,6 @@ final class LoginViewController: UIViewController {
         } else {
             return false
         }
-    }
-    
-    private func showAlertWith(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(alert, animated: true)
     }
     
     private func applyDesignChanges() {
@@ -123,11 +125,26 @@ final class LoginViewController: UIViewController {
     private func setPlaceholderText(to textField: UITextField, value: String) {
         textField.attributedPlaceholder = NSAttributedString(string: value, attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
     }
+
+    private func handleSuccesfulLogin(for user: User, headers: [String: String]) {
+        guard let authInfo = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: "Missing headers")
+            return
+        }
+        
+        guard let loginInfo = try? User(email: user.email, imageUrl: user.imageUrl ?? "", id: user.id) else {
+            SVProgressHUD.showError(withStatus: "Missing user details")
+            return
+        }
+        UserData.sharedInstance.user = loginInfo
+        UserData.sharedInstance.authInfo = authInfo
+        goToHomeScreen()
+    }
     
     private func goToHomeScreen() {
-        let storyboard = UIStoryboard(name: "Home", bundle: nil)
-        let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
-        navigationController?.pushViewController(homeViewController, animated: true)
+        let storyboard = UIStoryboard(name: "Shows", bundle: .main)
+        let homeViewController = storyboard.instantiateViewController(withIdentifier: String(describing: ShowsViewController.self)) as! ShowsViewController
+        navigationController?.setViewControllers([homeViewController], animated: true)
     }
 }
 
@@ -161,4 +178,8 @@ extension UIButton {
     func applyCornerRadius(of radius: CGFloat) {
         layer.cornerRadius = radius
     }
+}
+
+extension LoginViewController: ProgressReporting {
+    
 }
