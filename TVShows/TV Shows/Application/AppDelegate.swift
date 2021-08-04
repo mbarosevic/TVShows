@@ -7,6 +7,12 @@
 
 import UIKit
 
+func printDbg(_ obj: Any) {
+    #if DEBUG
+    print(obj)
+    #endif
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

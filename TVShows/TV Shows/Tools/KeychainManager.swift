@@ -28,6 +28,23 @@ class KeychainManager {
         keychain["uid"] = nil
     }
     
+    func storeAuthInfo(_ authInfo: AuthInfo?) {
+        guard let authInfo = authInfo else {
+            try? keychain.remove("authInfo")
+            return
+        }
+        
+        let encoder = PropertyListEncoder()
+        let data = try! encoder.encode(authInfo)
+        try? keychain.set(data, key: "authInfo")
+    }
+    
+    func fetchAuthInfo() -> AuthInfo? {
+        // fetch
+        
+        return nil
+    }
+    
     public var accessToken: String {
         get {
             do {

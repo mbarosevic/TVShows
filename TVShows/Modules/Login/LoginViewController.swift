@@ -24,8 +24,10 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         applyDesignChanges()
         
+        #if DEBUG
         emailInputTextField.text = "mbarosevic@gmail.com"
         passwordInputTextField.text = "tester1234"
+        #endif
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -52,7 +52,7 @@ final class AccountViewController: UIViewController, UIImagePickerControllerDele
 
 extension AccountViewController {
     
-    private func setupUI(){
+    private func setupUI() {
         logoutButton.applyCornerRadius(of: 21.5)
         profilePhotoImageView.layer.cornerRadius = profilePhotoImageView.bounds.size.width / 2
     }
